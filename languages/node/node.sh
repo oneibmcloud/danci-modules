@@ -1,5 +1,6 @@
 #!/bin/bash
 #Stage: GC Setup
+#echo "GC_NEXT_STAGE"
 echo "$ nvm -v"
 . /script/nvm/nvm.sh && nvm --version
 
