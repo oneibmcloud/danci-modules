@@ -1,6 +1,6 @@
 ## Docker Images
 
-DanCI Image Repository: [hub.docker.com/r/dstrat28/danci](https://hub.docker.com/r/dstrat28/danci/tags/)
+DanCI Image Repository: [dstrat28/danci](https://hub.docker.com/r/dstrat28/danci/tags/)
 #### Languages
 - [x] [Node.js](languages/node)
 - [ ] Java
