@@ -1,6 +1,5 @@
 #!/bin/bash
 #Stage: GC Setup
-#echo "GC_NEXT_STAGE"
 echo "$ nvm -v"
 . /script/nvm/nvm.sh && nvm --version
 
@@ -13,6 +12,7 @@ echo "$ nvm -v"
 #    echo "$ nvm install $LANGUAGE_VERSION"
 #    . /script/nvm/nvm.sh && nvm install $LANGUAGE_VERSION
 #fi
+
 echo "$ nvm install $LANGUAGE_VERSION"
 . /script/nvm/nvm.sh && nvm install $LANGUAGE_VERSION
 
@@ -23,10 +23,9 @@ echo "$ npm -v"
 npm -v
 
 #Stage: Install
-echo "GC_NEXT_STAGE"
-
 if [ -z ${GC_INSTALL+x} ];
 then
+    echo "GC_NEXT_STAGE_$ npm install"
     echo "$ npm install"
     npm install
     if [ $? -eq 0 ]
@@ -40,6 +39,7 @@ else
     IFS=',' read -ra install_arr <<< "$GC_INSTALL"
     for cmd in "${install_arr[@]}";
     do
+        echo "GC_NEXT_STAGE_$ $cmd"
         echo "$ $cmd"
         $cmd
         if [ $? -eq 0 ]
@@ -53,10 +53,9 @@ else
 fi
 
 #Stage: Test
-echo "GC_NEXT_STAGE"
-
 if [ -z ${GC_TEST+x} ];
 then
+    echo "GC_NEXT_STAGE_$ npm test"
     echo "$ npm test"
     npm test
     if [ $? -eq 0 ]
@@ -70,6 +69,7 @@ else
     IFS=',' read -ra test_arr <<< "$GC_TEST"
     for cmd in "${test_arr[@]}";
     do
+        echo "GC_NEXT_STAGE_$ $cmd"
         echo "$ $cmd"
         $cmd
         if [ $? -eq 0 ]
