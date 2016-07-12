@@ -1,5 +1,5 @@
 #!/bin/bash
-#Step: GC Setup
+#Step: DANCI Setup
 echo "$ nvm -v"
 . /script/nvm/nvm.sh && nvm --version
 
@@ -23,60 +23,60 @@ echo "$ npm -v"
 npm -v
 
 #Step: Install
-if [ -z ${GC_INSTALL+x} ];
+if [ -z ${DANCI_INSTALL+x} ];
 then
-    echo "GC_NEXT_STEP_$ npm install"
+    echo "DANCI_NEXT_STEP_$ npm install"
     echo "$ npm install"
     npm install
     if [ $? -eq 0 ]
     then
         echo "npm install exited with 0"
     else
-        echo "GC_ERROR: running npm install" >&2
+        echo "DANCI_ERROR: running npm install" >&2
         exit
     fi
 else
-    IFS=',' read -ra install_arr <<< "$GC_INSTALL"
+    IFS=',' read -ra install_arr <<< "$DANCI_INSTALL"
     for cmd in "${install_arr[@]}";
     do
-        echo "GC_NEXT_STEP_$ $cmd"
+        echo "DANCI_NEXT_STEP_$ $cmd"
         echo "$ $cmd"
         $cmd
         if [ $? -eq 0 ]
         then
             echo "$cmd exited with 0"
         else
-            echo "GC_ERROR: running $cmd" >&2
+            echo "DANCI_ERROR: running $cmd" >&2
             exit
         fi
     done
 fi
 
 #Step: Test
-if [ -z ${GC_TEST+x} ];
+if [ -z ${DANCI_TEST+x} ];
 then
-    echo "GC_NEXT_STEP_$ npm test"
+    echo "DANCI_NEXT_STEP_$ npm test"
     echo "$ npm test"
     npm test
     if [ $? -eq 0 ]
     then
         echo "npm test exited with 0"
     else
-        echo "GC_ERROR: running npm test" >&2
+        echo "DANCI_ERROR: running npm test" >&2
         exit
     fi
 else
-    IFS=',' read -ra test_arr <<< "$GC_TEST"
+    IFS=',' read -ra test_arr <<< "$DANCI_TEST"
     for cmd in "${test_arr[@]}";
     do
-        echo "GC_NEXT_STEP_$ $cmd"
+        echo "DANCI_NEXT_STEP_$ $cmd"
         echo "$ $cmd"
         $cmd
         if [ $? -eq 0 ]
         then
             echo "$cmd exited with 0"
         else
-            echo "GC_ERROR: running $cmd" >&2
+            echo "DANCI_ERROR: running $cmd" >&2
             exit
         fi
     done
