@@ -44,7 +44,7 @@ child = exec(command, function(error, stdout, stderr) {
     }
 
     var data = {
-        'module_name': 'npm-license',
+        'module_name': 'node-licenses',
         'latest': true,
         'type': 'segmented-bar',
         'data': array
