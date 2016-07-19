@@ -1,2 +1,2 @@
 License Checker Module
-~usage instructions go here~ 
+~usage instructions go here~
