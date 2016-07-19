@@ -35,10 +35,10 @@ child = exec(command,
                     }
                 }
                 if (check) {
-                  var tempObject = {};
-                  tempObject.license= tempKey;
-                  tempObject.count= 1;
-                  array.push(tempObject);
+                    var tempObject = {};
+                    tempObject.license = tempKey;
+                    tempObject.count = 1;
+                    array.push(tempObject);
 
                 }
 
@@ -50,12 +50,12 @@ child = exec(command,
             'latest': true,
             'type': 'segmented-bar',
             'data': array
-          };
+        };
 
 
         console.log(JSON.stringify(data));
         console.log("\n")
-        util.print("DANCI_MODULE_DATA_"+JSON.stringify(data));
+        util.print("DANCI_MODULE_DATA_" + JSON.stringify(data));
 
         if (error !== null) {
             console.log('exec error: ' + error);
