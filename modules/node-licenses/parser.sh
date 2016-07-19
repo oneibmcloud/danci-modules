@@ -1,3 +1,3 @@
 #!/bin/bash
-echo "./parser.js" 
-./parser.js
+echo "node /script/parser.js"
+node /script/parser.js

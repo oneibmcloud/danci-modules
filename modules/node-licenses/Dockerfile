@@ -1,6 +1,6 @@
 FROM node:latest
-COPY ./lc.sh /script/
+COPY ./parser.sh /script/
+COPY ./parser.js /script/
 RUN chmod -R 755 /script/
 RUN npm install -g license-checker
-CMD ["/script/lc.sh"]
 CMD ["/script/parser.sh"]
