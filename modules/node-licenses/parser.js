@@ -26,20 +26,19 @@ child = exec(command, function(error, stdout, stderr) {
             for (var j = 0; j < array.length; j++) {
                 //console.log("Object.keys(array[j]): "+Object.keys(array[j]));
                 //if it already has this object, update count
-                if (aContainsB(array[j].license, tempKey)) {
-                    array[j].count++;
+                if (aContainsB(array[j][0], tempKey)) {
+                    array[j][1]++;
                     check = false;
                     break;
                 }
             }
             if (check) {
-                var tempObject = {};
-                tempObject.license = tempKey;
-                tempObject.count = 1;
+                var tempObject = [];
+                tempObject.push(tempKey);
+                tempObject.push(1);
                 array.push(tempObject);
 
             }
-
         }
     }
 
