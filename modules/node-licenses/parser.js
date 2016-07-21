@@ -43,13 +43,12 @@ child = exec(command, function(error, stdout, stderr) {
     }
 
     var data = {
-        'module_name': 'node-licenses',
         'latest': true,
         'type': 'segmented-bar',
         'data': array
     };
 
-    console.log(JSON.stringify(data));
+    console.log(array);
     console.log("DANCI_MODULE_DATA_" + JSON.stringify(data));
 
     if (error !== null) {
