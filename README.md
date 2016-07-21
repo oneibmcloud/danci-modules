@@ -1,6 +1,7 @@
 ## Docker Images
 
-DanCI Image Repository: [danci](https://hub.docker.com/r/danci/)
+[DanCI Image Repository](https://hub.docker.com/r/danci/)
+
 #### Languages
 - [x] [Node.js](languages/node)
 - [ ] Java
