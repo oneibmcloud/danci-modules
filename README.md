@@ -11,5 +11,5 @@
 #### Modules
 - [x] Git Clone (For Internal Use)
 - [ ] Git Revert (For Internal Use)
-- [x] [Deploy: Cloud Foundry](modules/deploy-cloudfoundry)
-- [x] Node Licenses
+- [x] [Deploy: Cloud Foundry](modules/deploy-cf)
+- [x] [Node Licenses](modules/node-licenses)
