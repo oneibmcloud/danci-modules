@@ -1,6 +1,6 @@
 ## Docker Images
 
-DanCI Image Repository: [dstrat28/danci](https://hub.docker.com/r/dstrat28/danci/tags/)
+DanCI Image Repository: [danci](https://hub.docker.com/r/danci/)
 #### Languages
 - [x] [Node.js](languages/node)
 - [ ] Java
@@ -11,4 +11,4 @@ DanCI Image Repository: [dstrat28/danci](https://hub.docker.com/r/dstrat28/danci
 - [x] Git Clone (For Internal Use)
 - [ ] Git Revert (For Internal Use)
 - [x] [Deploy: Cloud Foundry](modules/deploy-cloudfoundry)
-- [ ] Node: License Info
+- [x] Node Licenses
