@@ -59,7 +59,7 @@ child = exec(command, function(error, stdout, stderr) {
     console.log("DANCI_MODULE_DATA_" + JSON.stringify(data));
 
     //build string for summary
-        var datastring = "";
+        var datastring = "DANCI_STEP_SUMMARY_";
         for (var m = 0; m < array.length - 1; m++) {
             datastring += array[m][0] + "(" + array[m][1] + "),";
 
@@ -71,7 +71,8 @@ child = exec(command, function(error, stdout, stderr) {
 
         //print summary string
         console.log(datastring);
-        
+        console.log(DANCI_STEP_STATUS_SUCCESS);
+
     if (error !== null) {
         console.log('exec error: ' + error);
     }
