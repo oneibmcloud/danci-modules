@@ -45,7 +45,7 @@ child = exec(command, function(error, stdout, stderr) {
     //sort in ascending order
         array.sort(
             function(a, b) {
-                return a[1] - b[1];
+                return b[1] - a[1];
             }
         );
 
@@ -61,12 +61,12 @@ child = exec(command, function(error, stdout, stderr) {
     //build string for summary
         var datastring = "DANCI_STEP_SUMMARY_";
         for (var m = 0; m < array.length - 1; m++) {
-            datastring += array[m][0] + "(" + array[m][1] + "),";
+            datastring += array[m][0] + " (" + array[m][1] + "), ";
 
         }
 
         //add last result
-        datastring += array[array.length - 1][0] + "(" + array[array.length - 1][1] + ")";
+        datastring += array[array.length - 1][0] + " (" + array[array.length - 1][1] + ")";
 
         //print summary string
         console.log(datastring);
