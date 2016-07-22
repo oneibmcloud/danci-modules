@@ -65,13 +65,12 @@ child = exec(command, function(error, stdout, stderr) {
 
         }
 
-
         //add last result
         datastring += array[array.length - 1][0] + "(" + array[array.length - 1][1] + ")";
 
         //print summary string
         console.log(datastring);
-        console.log(DANCI_STEP_STATUS_SUCCESS);
+        console.log('DANCI_STEP_STATUS_SUCCESS');
 
     if (error !== null) {
         console.log('exec error: ' + error);
