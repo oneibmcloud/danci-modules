@@ -42,6 +42,13 @@ child = exec(command, function(error, stdout, stderr) {
         }
     }
 
+    //sort in ascending order
+        array.sort(
+            function(a, b) {
+                return a[1] - b[1];
+            }
+        );
+
     var data = {
         'latest': true,
         'type': 'segmented-bar',
@@ -51,6 +58,20 @@ child = exec(command, function(error, stdout, stderr) {
     console.log(array);
     console.log("DANCI_MODULE_DATA_" + JSON.stringify(data));
 
+    //build string for summary
+        var datastring = "";
+        for (var m = 0; m < array.length - 1; m++) {
+            datastring += array[m][0] + "(" + array[m][1] + "),";
+
+        }
+
+
+        //add last result
+        datastring += array[array.length - 1][0] + "(" + array[array.length - 1][1] + ")";
+
+        //print summary string
+        console.log(datastring);
+        
     if (error !== null) {
         console.log('exec error: ' + error);
     }
