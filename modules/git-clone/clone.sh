@@ -20,12 +20,16 @@ else
     git checkout $PULL_ID
 fi
 
-rm -rf /id_rsa
-
 if [ $? -eq 0 ]
 then
     echo "git clone exited with 0"
+    echo "DANCI_STEP_SUMMARY_git clone exited with 0"
+    echo "DANCI_STEP_STATUS_SUCCESS"
+    rm -rf /id_rsa
 else
     echo "GC_ERROR: running git clone" >&2
+    echo "DANCI_STEP_SUMMARY_Error running git clone"
+    echo "DANCI_STEP_STATUS_FAILURE"
+    rm -rf /id_rsa
     exit
 fi
