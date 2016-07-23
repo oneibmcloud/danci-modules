@@ -18,8 +18,10 @@ echo "$ nvm install $LANGUAGE_VERSION"
 
 if [ $? -eq 0 ]
 then
+    node_version=`node -v`
+    npm_version=`npm -v`
     echo "nvm install $LANGUAGE_VERSION exited with 0"
-    echo "DANCI_STEP_SUMMARY_nvm install $LANGUAGE_VERSION exited with 0"
+    echo "DANCI_STEP_SUMMARY_Installed Node $node_version, NPM v$npm_version"
     echo "DANCI_STEP_STATUS_SUCCESS"
 else
     echo "DANCI_ERROR: running nvm install $LANGUAGE_VERSION" >&2
