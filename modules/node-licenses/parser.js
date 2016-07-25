@@ -107,18 +107,17 @@ child = exec(command, function(error, stdout, stderr) {
         }
     };
 
-    //console.log(chart_array);
     //print all results
 
     //print to show ouput to console
-    // console.log(array);
+     console.log(array);
     //
     // //print to store in module database
      console.log("DANCI_MODULE_DATA_" + JSON.stringify(data));
     //
     // //print summary string
-    // console.log(datastring);
-    // console.log('DANCI_STEP_STATUS_SUCCESS');
+     console.log(datastring);
+     console.log('DANCI_STEP_STATUS_SUCCESS');
 
     if (error !== null) {
         console.log('exec error: ' + error);
