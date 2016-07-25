@@ -1,4 +1,4 @@
-if [ -z ${DANCI_INSTALL+x} ];
+if [ -z ${JSHINT_PATH} ];
 then
 jshint $JSHINT_PATH
 else
