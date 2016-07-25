@@ -43,34 +43,82 @@ child = exec(command, function(error, stdout, stderr) {
     }
 
     //sort in ascending order
-        array.sort(
-            function(a, b) {
-                return b[1] - a[1];
-            }
-        );
+    array.sort(
+        function(a, b) {
+            return b[1] - a[1];
+        }
+    );
+
+
+    //initialize data for chart
+    chart_array = [];
+    var licenses = ['License'];
+    var count = ['License Info'];
+
+
+
+    //build string for summary and fill data for chart
+    var datastring = "DANCI_STEP_SUMMARY_";
+    for (var m = 0; m < array.length - 1; m++) {
+        datastring += array[m][0] + " (" + array[m][1] + "), ";
+        licenses.push(array[m][0]);
+        licenses.push({
+            role: 'annotation'
+        });
+        count.push(array[m][1]);
+        count.push(array[m][1].toString());
+
+    }
+
+    //final addition to datastring
+    datastring += array[array.length - 1][0] + " (" + array[array.length - 1][1] + ")";
+
+    //push licenses and count to final data array
+    chart_array.push(licenses);
+    chart_array.push(count);
+
 
     var data = {
+        'type': "BarChart",
         'latest': true,
-        'type': 'segmented-bar',
-        'data': array
+        'title': 'Node.js License Info',
+        'data': chart_array,
+        'options': {
+            isStacked: true,
+            hAxis: {
+                baselineColor: 'transparent',
+                textPosition: 'none',
+                gridlines: {
+                    color: 'transparent'
+                }
+            },
+            vAxis: {
+                baselineColor: 'transparent',
+                textPosition: 'none'
+            },
+            backgroundColor: {
+                fill: 'transparent'
+            },
+            legend: {
+                position: 'none'
+            },
+            width: 750,
+            height: 300
+        }
     };
 
-    console.log(array);
-    console.log("DANCI_MODULE_DATA_" + JSON.stringify(data));
+    //console.log(chart_array);
+    //print all results
 
-    //build string for summary
-        var datastring = "DANCI_STEP_SUMMARY_";
-        for (var m = 0; m < array.length - 1; m++) {
-            datastring += array[m][0] + " (" + array[m][1] + "), ";
-
-        }
-
-        //add last result
-        datastring += array[array.length - 1][0] + " (" + array[array.length - 1][1] + ")";
-
-        //print summary string
-        console.log(datastring);
-        console.log('DANCI_STEP_STATUS_SUCCESS');
+    //print to show ouput to console
+    // console.log(array);
+    //
+    // //print to store in module database
+     console.log("DANCI_MODULE_DATA_" + JSON.stringify(data));
+    //
+    // //print summary string
+    // console.log(datastring);
+    // console.log('DANCI_STEP_STATUS_SUCCESS');
 
     if (error !== null) {
         console.log('exec error: ' + error);
