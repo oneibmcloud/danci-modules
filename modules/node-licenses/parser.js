@@ -49,12 +49,10 @@ child = exec(command, function(error, stdout, stderr) {
         }
     );
 
-
     //initialize data for chart
     chart_array = [];
     var licenses = ['License'];
     var count = ['License Info'];
-
 
 
     //build string for summary and fill data for chart
@@ -81,7 +79,6 @@ child = exec(command, function(error, stdout, stderr) {
     var data = {
         'type': "BarChart",
         'latest': true,
-        'title': 'Node.js License Info',
         'data': chart_array,
         'options': {
             isStacked: true,
