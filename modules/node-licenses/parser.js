@@ -101,9 +101,7 @@ child = exec(command, function(error, stdout, stderr) {
             },
             legend: {
                 position: 'none'
-            },
-            width: 750,
-            height: 300
+            }
         }
     };
 
