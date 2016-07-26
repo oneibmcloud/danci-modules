@@ -23,7 +23,7 @@ Docker modules communicate with through certain keywords and environment variabl
 
 These environment variables can be used by your module if needed, such as 'DANCI_BUILD_FAILED' to determine what message to send in a notify module. Additional environment variables can be set per module under `env` in your .danci.json file.
 
-<b> Please note, the default working directory for every container will be where your files were downloaded to, so please set file paths accordingly</b>
+<b>Please note, the default working directory for every container will be where your files were downloaded to, so please set file paths accordingly.</b>
 
 The following keywords can be used by your module to pass information back to DanCI:
 
@@ -41,19 +41,19 @@ echo "DANCI_STEP_STATUS_SUCCESS"
 ```
 
 Module Data:
-To properly use module data with DanCI, pass in the following fields as a JSON object, following `DANCI_MODULE_DATA_`
+Module data is currently visualized through the use of Google Charts. To properly use module data with DanCI, pass in the following fields as a JSON object, following `DANCI_MODULE_DATA_`
 - `type`: The type of chart
 - `latest`: Set `true` if only the data from the latest build should be shown on repository module data page, `false` if the data should be charted over time.
-- `title`: The title of your charted
 - `data`: Properly formatted data for your chart
 - `options`: Specific UI options for your chart
+
+More information on how to format `data` and `options` can be found here - [developers.google.com/chart](https://developers.google.com/chart/interactive/docs/)
 
 Example:
 ```
 var data = {
     'type': "BarChart",
     'latest': true,
-    'title': 'Node.js License Info',
     'data': chart_array,
     'options': {
         isStacked: true,
