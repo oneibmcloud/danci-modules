@@ -43,26 +43,21 @@ child = exec(command, function(error, stdout, stderr) {
     }
 
     //sort in ascending order
-    array.sort(
-        function(a, b) {
-            return b[1] - a[1];
-        }
-    );
+    array.sort(function(a, b) {
+        return b[1] - a[1];
+    });
 
     //initialize data for chart
     chart_array = [];
     var licenses = ['License'];
     var count = ['License Info'];
 
-
     //build string for summary and fill data for chart
     var datastring = "DANCI_STEP_SUMMARY_";
     for (var m = 0; m < array.length - 1; m++) {
         datastring += array[m][0] + " (" + array[m][1] + "), ";
         licenses.push(array[m][0]);
-        licenses.push({
-            role: 'annotation'
-        });
+        licenses.push({role: 'annotation'});
         count.push(array[m][1]);
         count.push(array[m][1].toString());
 
@@ -75,11 +70,11 @@ child = exec(command, function(error, stdout, stderr) {
     chart_array.push(licenses);
     chart_array.push(count);
 
-
     var data = {
         'type': "BarChart",
         'latest': true,
         'data': chart_array,
+        'title': 'Node.js License Info',
         'options': {
             isStacked: true,
             hAxis: {
@@ -98,21 +93,23 @@ child = exec(command, function(error, stdout, stderr) {
             },
             legend: {
                 position: 'none'
-            }
+            },
+            width: 750,
+            height: 300
         }
     };
 
     //print all results
 
     //print to show ouput to console
-     console.log(array);
+    console.log(array);
     //
     // //print to store in module database
-     console.log("DANCI_MODULE_DATA_" + JSON.stringify(data));
+    console.log("DANCI_MODULE_DATA_" + JSON.stringify(data));
     //
     // //print summary string
-     console.log(datastring);
-     console.log('DANCI_STEP_STATUS_SUCCESS');
+    console.log(datastring);
+    console.log('DANCI_STEP_STATUS_SUCCESS');
 
     if (error !== null) {
         console.log('exec error: ' + error);
