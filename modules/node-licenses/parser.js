@@ -1,19 +1,19 @@
 var exec = require('child_process').exec;
-var child;
-var array = [];
-var command = 'license-checker';
+var color = require('./randomColor.js');
 var util = require('util');
+var command = 'license-checker';
 
 var aContainsB = function(a, b) {
     return a.indexOf(b) >= 0;
 };
 
 //reading input of license-scanner
-child = exec(command, function(error, stdout, stderr) {
+var child = exec(command, function(error, stdout, stderr) {
     if (error) {
-        console.log('exec error: ' + error);
+        return console.log(error);
     }
 
+    var array = [];
     var lines = stdout.split('\n');
 
     //iterate through each line of output
@@ -52,38 +52,39 @@ child = exec(command, function(error, stdout, stderr) {
 
     //initialize data for chart
     var licenses = [];
-    var count = [];
+    var licenses_counts = [];
 
     //build string for summary and fill data for chart
-    var datastring;
+    var datastring = '';
     for (var m = 0; m < array.length - 1; m++) {
         datastring += array[m][0] + ' (' + array[m][1] + '), ';
-        licenses.push(array[m][0] + ' (' + array[m][1] + ')');
-        count.push(array[m][1]);
+        licenses.push(array[m][0]);
+        licenses_counts.push(array[m][1]);
     }
 
     //final addition to datastring
     datastring += array[array.length - 1][0] + ' (' + array[array.length - 1][1] + ')';
-    licenses.push(array[array.length - 1][0] + ' (' + array[array.length - 1][1] + ')');
-    count.push(array[array.length - 1][1]);
+    licenses.push(array[array.length - 1][0]);
+    licenses_counts.push(array[array.length - 1][1]);
+
+    var colors = color.randomColor({count: licenses_counts.length, hue: 'blue'});
 
     var chart_data = {
         labels: licenses,
         datasets: [
             {
-                data: count
+                data: licenses_counts,
+                backgroundColor: colors,
+                hoverBackgroundColor: colors
             }
         ]
     };
 
     var data = {
-        'type': 'doughnut',
-        'latest': true,
-        'data': chart_data,
         'title': 'Node.js License Info',
-        'animation': {
-            animateScale: true
-        }
+        'latest': true,
+        'type': 'doughnut',
+        'data': chart_data
     };
 
     //print all results

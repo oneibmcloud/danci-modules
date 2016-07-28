@@ -47,34 +47,27 @@ Module data is currently visualized through the use of Google Charts. To properl
 - `data`: Properly formatted data for your chart
 - `options`: Specific UI options for your chart
 
-More information on how to format `data` and `options` can be found here - [developers.google.com/chart](https://developers.google.com/chart/interactive/docs/)
+More information on how to format `data` and `options` can be found at [chartjs.org](http://chartjs.org/docs)
 
 Example:
 ```
-var data = {
-    'type': "BarChart",
-    'latest': true,
-    'data': chart_array,
-    'options': {
-        isStacked: true,
-        hAxis: {
-            baselineColor: 'transparent',
-            textPosition: 'none',
-            gridlines: {
-                color: 'transparent'
-            }
-        },
-        vAxis: {
-            baselineColor: 'transparent',
-            textPosition: 'none'
-        },
-        backgroundColor: {
-            fill: 'transparent'
-        },
-        legend: {
-            position: 'none'
+var chart_data = {
+    labels: licenses,
+    datasets: [
+        {
+            data: licenses_counts,
+            backgroundColor: colors,
+            hoverBackgroundColor: colors
         }
-    }
+    ]
 };
+
+var data = {
+    'title': 'Node.js License Info',
+    'latest': true,
+    'type': 'doughnut',
+    'data': chart_data
+};
+
 console.log("DANCI_MODULE_DATA_" + JSON.stringify(data));
 ```
