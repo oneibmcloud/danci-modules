@@ -1,0 +1,7 @@
+Environment Variables that need to be set for SendGrid:
+SENDGRID_USER
+SENDGRID_PASS
+TO_EMAIL_ADDRESS
+FROM_EMAIL_ADDRESS
+EMAIL_SUBJECT
+EMAIL_BODY
