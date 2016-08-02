@@ -9,37 +9,34 @@ checker.init({
     start: process.env.FILE_PATH
 }, function(json, err) {
     if (err) {
-        return console.log(err);
+        console.log('DANCI_ERROR: running git clone');
+        console.log('DANCI_STEP_SUMMARY_Error running git clone');
+        return console.log('DANCI_STEP_STATUS_FAILURE');
     }
     var array = [];
-    var lines = json.split('\n');
 
-    //iterate through each line of output
-    for (var i = 0; i < lines.length; i++) {
+    for (var module in json) {
+        var tempKey = json[module];
+        tempKey = tempKey.licenses;
+        //make a new object that contains the license object
 
-        //check if the current line is lists the license
-        if (aContainsB(lines[i], 'licenses: ')) {
-            var tempKey = lines[i].split('licenses: ')[1];
-            //make a new object that contains the license object
+        var check = true;
 
-            var check = true;
-
-            //iterate through the array with license objects
-            for (var j = 0; j < array.length; j++) {
-                //console.log('Object.keys(array[j]): '+Object.keys(array[j]));
-                //if it already has this object, update count
-                if (aContainsB(array[j][0], tempKey)) {
-                    array[j][1]++;
-                    check = false;
-                    break;
-                }
+        //iterate through the array with license objects
+        for (var j = 0; j < array.length; j++) {
+            //console.log('Object.keys(array[j]): '+Object.keys(array[j]));
+            //if it already has this object, update count
+            if (aContainsB(array[j][0], tempKey)) {
+                array[j][1]++;
+                check = false;
+                break;
             }
-            if (check) {
-                var tempObject = [];
-                tempObject.push(tempKey);
-                tempObject.push(1);
-                array.push(tempObject);
-            }
+        }
+        if (check) {
+            var tempObject = [];
+            tempObject.push(tempKey);
+            tempObject.push(1);
+            array.push(tempObject);
         }
     }
 
