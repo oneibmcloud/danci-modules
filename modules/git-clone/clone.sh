@@ -23,7 +23,7 @@ fi
 if [ $? -eq 0 ]
 then
     echo "git clone exited with 0"
-    echo "DANCI_STEP_SUMMARY_git clone --branch=$BRANCH $GIT_URL exited with 0"
+    echo "DANCI_STEP_SUMMARY_git clone $GIT_URL completed successfully"
     echo "DANCI_STEP_STATUS_SUCCESS"
     rm -rf /id_rsa
 else
