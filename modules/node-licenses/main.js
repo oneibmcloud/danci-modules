@@ -1,20 +1,18 @@
-var exec = require('child_process').exec;
-var color = require('./randomColor.js');
-var util = require('util');
-var command = 'license-checker';
+var randomColor = require('randomcolor');
+var checker = require('license-checker');
 
 var aContainsB = function(a, b) {
     return a.indexOf(b) >= 0;
 };
 
-//reading input of license-scanner
-var child = exec(command, function(error, stdout, stderr) {
-    if (error) {
-        return console.log(error);
+checker.init({
+    start: process.env.FILE_PATH
+}, function(json, err) {
+    if (err) {
+        return console.log(err);
     }
-
     var array = [];
-    var lines = stdout.split('\n');
+    var lines = json.split('\n');
 
     //iterate through each line of output
     for (var i = 0; i < lines.length; i++) {
@@ -67,7 +65,7 @@ var child = exec(command, function(error, stdout, stderr) {
     licenses.push(array[array.length - 1][0]);
     licenses_counts.push(array[array.length - 1][1]);
 
-    var colors = color.randomColor({count: licenses_counts.length, hue: 'blue'});
+    var colors = randomColor({count: licenses_counts.length, hue: 'blue'});
 
     var chart_data = {
         labels: licenses,
