@@ -8,11 +8,9 @@ var aContainsB = function(a, b) {
 };
 
 //reading input of license-scanner
-var child = exec(command, function(err, stdout, stderr) {
-    if (err) {
-        console.log('DANCI_ERROR: running node licenses');
-        console.log('DANCI_STEP_SUMMARY_Error running node licenses');
-        return console.log('DANCI_STEP_STATUS_FAILURE');
+var child = exec(command, function(error, stdout, stderr) {
+    if (error) {
+        return console.log(error);
     }
 
     var array = [];
