@@ -1,5 +1,5 @@
 FROM node:latest
 RUN mkdir -p /script
-RUN npm install -g jenkins
+RUN cd /script && npm install jenkins
 COPY main.js /script
 CMD [ "node", "/script/main.js" ]
