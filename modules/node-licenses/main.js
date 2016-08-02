@@ -16,9 +16,9 @@ checker.init({
     var array = [];
 
     for (var module in json) {
+        //make a new object that contains the license object
         var tempKey = json[module];
         tempKey = tempKey.licenses;
-        //make a new object that contains the license object
 
         var check = true;
 
