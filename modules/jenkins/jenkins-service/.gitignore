@@ -42,3 +42,4 @@ ehthumbs.db
 Thumbs.db
 
 env_var.sh
+app/modules/rabbitmq.cert

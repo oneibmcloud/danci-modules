@@ -1,7 +1,8 @@
 FROM node:latest
-RUN mkdir -p /script
-COPY package.json /script
-RUN cd /script && npm install
-COPY . /script
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY package.json /usr/src/app/
+RUN npm install
+COPY . /usr/src/app
 EXPOSE 8080
-CMD [ "/script/npm", "start" ]
+CMD [ "npm", "start" ]

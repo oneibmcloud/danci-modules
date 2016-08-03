@@ -1,5 +1,4 @@
 //Required dependencies
-var async = require('async');
 var bunyan = require('bunyan');
 var express = require('express');
 
@@ -34,6 +33,6 @@ function createChannel() {
     });
 }
 //Start Express Server
-app.listen(process.env.PORT, '0.0.0.0', function() {
+app.listen(process.env.PORT || 8080, '0.0.0.0', function() {
     log.info('Express Server Started');
 });
