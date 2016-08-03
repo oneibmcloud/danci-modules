@@ -1,21 +1,23 @@
 //Required dependencies
-var async = require('async');
 var express = require('express');
 
 var amqp = require('./app/modules/amqp.js');
 var jenkins = require('./app/jenkins.js');
 
-//Create express server & socket.io
 var app = express();
 
-jenkins(app);
-
 amqp.connect(function(err) {
-    if (err) return console.log(err);
+    if (err) {
+        console.log('DANCI_STEP_SUMMARY_' + err);
+        console.log('DANCI_STEP_STATUS_FAILURE');
+        console.log(err);
+        return console.log('DANCI_ERROR: ' + err);
+    }
     console.log('Connected to CloudAMQP');
+    jenkins(app);
 });
 
 //Start Express Server
-app.listen(process.env.PORT, '0.0.0.0', function() {
-    log.info('Express Server Started');
+app.listen(process.env.PORT || 8080, '0.0.0.0', function() {
+    console.log('Express Server Started');
 });

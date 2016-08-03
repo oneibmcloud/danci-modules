@@ -9,8 +9,8 @@ checker.init({
     start: process.env.FILE_PATH
 }, function(json, err) {
     if (err) {
-        console.log('DANCI_ERROR: running git clone');
-        console.log('DANCI_STEP_SUMMARY_Error running git clone');
+        console.log('DANCI_ERROR_Error running license checker');
+        console.log('DANCI_STEP_SUMMARY_Error running license checker');
         return console.log('DANCI_STEP_STATUS_FAILURE');
     }
     var array = [];

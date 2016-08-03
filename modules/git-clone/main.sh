@@ -27,7 +27,7 @@ then
     echo "DANCI_STEP_STATUS_SUCCESS"
     rm -rf /id_rsa
 else
-    echo "DANCI_ERROR: running git clone" >&2
+    echo "DANCI_ERROR_Error running git clone" >&2
     echo "DANCI_STEP_SUMMARY_Error running git clone"
     echo "DANCI_STEP_STATUS_FAILURE"
     rm -rf /id_rsa

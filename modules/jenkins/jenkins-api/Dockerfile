@@ -4,4 +4,4 @@ COPY package.json /script
 RUN cd /script && npm install
 COPY . /script
 EXPOSE 8080
-CMD [ "/script/node", "main.js" ]
+CMD [ "node", "/script/main.js" ]

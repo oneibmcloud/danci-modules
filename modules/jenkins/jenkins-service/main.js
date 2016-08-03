@@ -6,8 +6,6 @@ var amqp = require('./app/modules/amqp.js');
 var jenkins = require('./app/jenkins.js');
 
 var log = bunyan.createLogger({name: 'jenkins-service'});
-
-//Create express server & socket.io
 var app = express();
 
 amqp.connect(function(err) {

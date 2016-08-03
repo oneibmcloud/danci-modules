@@ -1,3 +1,5 @@
+var amqp = require('./modules/amqp.js');
+
 module.exports = function() {
 
     var jenkins_info = {
@@ -9,8 +11,12 @@ module.exports = function() {
 
     function sendToQueue(jenkins_info) {
         amqp.get().createChannel(function(err, channel) {
-            if (err)
-                return console.log(err);
+            if (err) {
+                console.log(err);
+                console.log('DANCI_STEP_SUMMARY_' + err);
+                console.log('DANCI_STEP_STATUS_FAILURE');
+                return console.log('DANCI_ERROR: ' + err);
+            }
             var q = 'build_queue';
             channel.assertQueue(q, {durable: true});
             channel.sendToQueue(q, new Buffer(JSON.stringify(jenkins_info)), {persistent: true});
