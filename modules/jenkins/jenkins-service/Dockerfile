@@ -1,5 +1,7 @@
 FROM node:latest
 RUN mkdir -p /script
-RUN cd /script && npm install jenkins
-COPY main.js /script
-CMD [ "node", "/script/main.js" ]
+COPY package.json /script
+RUN cd /script && npm install
+COPY . /script
+EXPOSE 8080
+CMD [ "/script/npm", "start" ]

@@ -1,30 +1,39 @@
-var jenkins = require('jenkins')(process.env.JENKINS_URL);
+//Required dependencies
+var async = require('async');
+var bunyan = require('bunyan');
+var express = require('express');
 
-//Trigger new build
-jenkins.job.build('example', function(err) {
+var amqp = require('./app/modules/amqp.js');
+var jenkins = require('./app/jenkins.js');
+
+var log = bunyan.createLogger({name: 'jenkins-service'});
+
+//Create express server & socket.io
+var app = express();
+
+amqp.connect(function(err) {
     if (err)
-        return err;
-    }
-);
+        return log.error(err);
+    log.info('Connected to CloudAMQP', amqp);
+    createChannel();
+});
 
-//Get build status
-function buildStatus(buildName, buildId) {
-    jenkins.build.get(buildName, buildId, function(err, data) {
+function createChannel() {
+    amqp.get().createChannel(function(err, channel) {
         if (err)
-            return err;
-        if (data.inQueue === false) {
-            buildLog(buildName, buildId);
-        } else {
-            buildStatus(buildName, buildId);
-        }
+            return log.error(err);
+
+        log.info('Create channel', channel);
+
+        var q = 'build_queue';
+        channel.assertQueue(q, {durable: true});
+        channel.consume(q, function(jenkins_info) {
+            jenkins(JSON.parse(jenkins_info.content.toString()));
+            channel.ack(jenkins_info);
+        }, {noAck: false});
     });
 }
-
-//Get build log
-function buildLog(buildName, buildId) {
-    jenkins.build.get(buildName, buildId, function(err, data) {
-        if (err)
-            return err;
-        console.log(data);
-    });
-}
+//Start Express Server
+app.listen(process.env.PORT, '0.0.0.0', function() {
+    log.info('Express Server Started');
+});

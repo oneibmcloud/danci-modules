@@ -1,0 +1,16 @@
+{
+  "name": "jenkins-api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.4.2",
+    "express": "^4.13.4",
+    "jenkins": "^0.17.0"
+  },
+  "engines": {
+    "node": "6.x"
+  }
+}
