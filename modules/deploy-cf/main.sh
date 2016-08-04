@@ -31,7 +31,7 @@ echo "cf push $APP_NAME -p $FILE_PATH"
 if [ $? -eq 0 ]
 then
     echo "cf push $APP_NAME -p $FILE_PATH exited with 0"
-    echo "DANCI_STEP_SUMMARY_Successfully Deployed $APP_NAME"
+    echo "DANCI_STEP_SUMMARY_Deployed $APP_NAME in org $DEPLOY_ORGANIZATION, space $DEPLOY_SPACE"
     echo "DANCI_STEP_STATUS_SUCCESS"
 else
     echo "DANCI_ERROR_Error running cf push $APP_NAME -p $FILE_PATH" >&2
