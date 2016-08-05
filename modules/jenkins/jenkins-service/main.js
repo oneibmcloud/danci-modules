@@ -19,7 +19,7 @@ amqp.connect(process.env.RABBITMQ_URL, {
 
         ch.assertQueue(q, {durable: true});
         ch.consume(q, function(jenkins_info) {
-            jenkins_service(JSON.parse(jenkins_info.content.toString()));
+            jenkins_service(JSON.parse(jenkins_info.content.toString()), conn);
             ch.ack(jenkins_info);
         }, {noAck: false});
     });
@@ -27,7 +27,7 @@ amqp.connect(process.env.RABBITMQ_URL, {
 
 //IMPORTANT: DOES NOT SUPPORT CRUMBS YET..., SEE NODE API OPEN ISSUES
 
-function jenkins_service(jenkins_info) {
+function jenkins_service(jenkins_info, conn) {
     var jenkins = require('jenkins')(jenkins_info.url);
 
     //Trigger new build
@@ -35,41 +35,34 @@ function jenkins_service(jenkins_info) {
         'name': jenkins_info.job_name,
         'token': jenkins_info.job_token
     }, function(err, buildNumber) {
-        if (err) {
+        if (err)
             return console.log(err);
-        }
-        console.log('Jenkins build started...');
-        buildStatus(jenkins_info.job_name, buildNumber);
+
+        console.log('Jenkins build started...' + buildNumber);
+        buildStatus(jenkins_info.job_name, buildNumber, conn);
     });
 
     //Get build status
-    function buildStatus(jobName, buildNumber) {
-        jenkins.build.get(jobName, buildNumber, function(err, data) {
-            if (err)
-                return console.log(err);
-            if (data.building === true) {
-                buildStatus(jobName, buildNumber);
-            } else {
-                buildLog(jobName, buildNumber);
-            }
-        });
-    }
-
-    //Get build log
-    function buildLog(jobName, buildNumber) {
+    function buildStatus(jobName, buildNumber, conn) {
         jenkins.build.get(jobName, buildNumber, function(err, data) {
             if (err)
                 return console.log(err);
             console.log(data);
+            if (data.building === true) {
+                buildStatus(jobName, buildNumber, conn);
+            } else {
+                conn.createChannel(function(err, ch) {
+                    if (err)
+                        return console.log(err);
+
+                    console.log('Created RabbitMQ Channel 2');
+
+                    var q = 'jenkins_info';
+
+                    ch.assertQueue(q, {durable: true});
+                    ch.sendToQueue(q, new Buffer(JSON.stringify(data)));
+                });
+            }
         });
     }
 }
-
-/*
-var express = require('express');
-var app = express();
-//Start Express Server
-app.listen(process.env.PORT || 8080, '0.0.0.0', function() {
-    console.log('Express Server Started');
-});
-*/
