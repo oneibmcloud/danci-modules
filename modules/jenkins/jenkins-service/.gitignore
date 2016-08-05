@@ -41,5 +41,4 @@ node_modules
 ehthumbs.db
 Thumbs.db
 
-rabbitmq_cert
-rabbitmq_url
+env_var.sh

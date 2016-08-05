@@ -1,28 +1,31 @@
 //Required dependencies
 var amqp = require('amqplib/callback_api');
-var bunyan = require('bunyan');
-var log = bunyan.createLogger({name: 'jenkins-service'});
 
-amqp.connect(fs.readFileSync('./rabbitmq_url'), {
-    ca: [fs.readFileSync('./rabbitmq_cert')]
+amqp.connect(process.env.RABBITMQ_URL, {
+    ca: [process.env.RABBITMQ_CERT]
 }, function(err, conn) {
     if (err)
-        return log.error(err);
-    amqp.get().createChannel(function(err, channel) {
+        return console.log(err);
+
+    console.log('Connected to RabbitMQ Server');
+
+    conn.createChannel(function(err, ch) {
         if (err)
-            return log.error(err);
+            return console.log(err);
 
-        log.info('Create channel', channel);
+        console.log('Created RabbitMQ Channel');
 
-        var q = 'build_queue';
-        channel.assertQueue(q, {durable: true});
-        channel.consume(q, function(jenkins_info) {
-            console.log('RECEIVED!!');
-            //jenkins_service(JSON.parse(jenkins_info.content.toString()));
-            channel.ack(jenkins_info);
+        var q = 'jenkins_queue';
+
+        ch.assertQueue(q, {durable: true});
+        ch.consume(q, function(jenkins_info) {
+            jenkins_service(JSON.parse(jenkins_info.content.toString()));
+            ch.ack(jenkins_info);
         }, {noAck: false});
     });
 });
+
+//IMPORTANT: DOES NOT SUPPORT CRUMBS YET..., SEE NODE API OPEN ISSUES
 
 function jenkins_service(jenkins_info) {
     var jenkins = require('jenkins')(jenkins_info.url);
@@ -31,32 +34,32 @@ function jenkins_service(jenkins_info) {
     jenkins.job.build({
         'name': jenkins_info.job_name,
         'token': jenkins_info.job_token
-    }, function(err) {
+    }, function(err, buildNumber) {
         if (err) {
-            return err;
+            return console.log(err);
         }
-        console.log('build started');
-        //buildStatus();
+        console.log('Jenkins build started...');
+        buildStatus(jenkins_info.job_name, buildNumber);
     });
 
     //Get build status
-    function buildStatus(buildName, buildId) {
-        jenkins.build.get(buildName, buildId, function(err, data) {
+    function buildStatus(jobName, buildNumber) {
+        jenkins.build.get(jobName, buildNumber, function(err, data) {
             if (err)
-                return err;
-            if (data.inQueue === false) {
-                buildLog(buildName, buildId);
+                return console.log(err);
+            if (data.building === true) {
+                buildStatus(jobName, buildNumber);
             } else {
-                buildStatus(buildName, buildId);
+                buildLog(jobName, buildNumber);
             }
         });
     }
 
     //Get build log
-    function buildLog(buildName, buildId) {
-        jenkins.build.get(buildName, buildId, function(err, data) {
+    function buildLog(jobName, buildNumber) {
+        jenkins.build.get(jobName, buildNumber, function(err, data) {
             if (err)
-                return err;
+                return console.log(err);
             console.log(data);
         });
     }
@@ -67,6 +70,6 @@ var express = require('express');
 var app = express();
 //Start Express Server
 app.listen(process.env.PORT || 8080, '0.0.0.0', function() {
-    log.info('Express Server Started');
+    console.log('Express Server Started');
 });
 */
