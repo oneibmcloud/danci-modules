@@ -38,16 +38,21 @@ function jenkins_service(jenkins_info, conn) {
         if (err)
             return console.log(err);
 
-        console.log('Jenkins build started...' + buildNumber);
-        buildStatus(jenkins_info.job_name, buildNumber, conn);
+        console.log('Jenkins build started, job name: ' + jenkins_info.job_name + ', build number: ' + (buildNumber + 1));
+        buildStatus(jenkins_info.job_name, buildNumber + 1, conn);
     });
 
     //Get build status
     function buildStatus(jobName, buildNumber, conn) {
         jenkins.build.get(jobName, buildNumber, function(err, data) {
-            if (err)
-                return console.log(err);
-            console.log(data);
+            if (err) {
+                if (err.notFound === true) {
+                    return buildStatus(jobName, buildNumber, conn);
+                } else {
+                    return console.log(err);
+                }
+            }
+
             if (data.building === true) {
                 buildStatus(jobName, buildNumber, conn);
             } else {
