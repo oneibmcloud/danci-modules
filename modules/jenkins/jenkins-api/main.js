@@ -50,26 +50,39 @@ amqp.connect(process.env.RABBITMQ_URL, {
 
         console.log('Created RabbitMQ Channel 2');
 
-        var q = 'jenkins_info';
+        var ex = 'jenkins_info';
 
-        ch.assertQueue(q, {durable: true});
-        ch.consume(q, function(jenkins_info) {
-            var build_info = JSON.parse(jenkins_info.content.toString());
+        ch.assertExchange(ex, 'fanout', {durable: true});
+        ch.assertQueue('', {
+            exclusive: true
+        }, function(err, q) {
+            ch.bindQueue(q.queue, ex, '');
+            ch.consume(q.queue, function(build_report_encrypted) {
+                try {
+                    pubKey.decryptPublic(build_report_encrypted.content.toString(), 'utf8');
+                    decryptMessage();
+                } catch (e) {}
 
-            console.log(build_info.build_data);
-            console.log('Jenkins Console Output:');
-            console.log(build_info.console_output);
+                function decryptMessage() {
+                    var build_report = pubKey.decryptPublic(build_report_encrypted.content.toString(), 'utf8');
+                    var build_info = JSON.parse(build_report);
 
-            if (build_info.build_data.result == 'SUCCESS') {
-                console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.build_data.fullDisplayName + ' succeeded');
-                console.log('DANCI_STEP_STATUS_SUCCESS');
-            } else {
-                console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.build_data.fullDisplayName + ' failed');
-                console.log('DANCI_STEP_STATUS_FAILURE');
-            }
+                    console.log(build_info.build_data);
+                    console.log('Jenkins Console Output:');
+                    console.log(build_info.console_output);
 
-            process.exit(0);
+                    if (build_info.build_data.result == 'SUCCESS') {
+                        console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.build_data.fullDisplayName + ' succeeded');
+                        console.log('DANCI_STEP_STATUS_SUCCESS');
+                    } else {
+                        console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.build_data.fullDisplayName + ' failed');
+                        console.log('DANCI_STEP_STATUS_FAILURE');
+                    }
 
-        }, {noAck: true});
+                    process.exit(0);
+                }
+
+            }, {noAck: false});
+        });
     });
 });

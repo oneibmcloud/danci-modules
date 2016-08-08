@@ -30,7 +30,7 @@ amqp.connect(process.env.RABBITMQ_URL, {
                 try {
                     key.decrypt(jenkins_info_encrypted.content.toString(), 'utf8');
                 } catch (e) {
-                    return console.log('Could not decrypt incoming message');
+                    return;
                 }
 
                 var jenkins_info = key.decrypt(jenkins_info_encrypted.content.toString(), 'utf8');
@@ -85,16 +85,19 @@ function jenkins_service(jenkins_info, conn) {
                 console_output: data
             };
 
+            var key = new NodeRSA(process.env.JENKINS_PRIVATE_KEY);
+            var build_report_encrypted = key.encryptPrivate(JSON.stringify(build_report), 'base64');
+
             conn.createChannel(function(err, ch) {
                 if (err)
                     return console.log(err);
 
                 console.log('Created RabbitMQ Channel 2');
 
-                var q = 'jenkins_info';
+                var ex = 'jenkins_info';
 
-                ch.assertQueue(q, {durable: true});
-                ch.sendToQueue(q, new Buffer(JSON.stringify(build_report)));
+                ch.assertExchange(ex, 'fanout', {durable: true});
+                ch.publish(ex, '', new Buffer(build_report_encrypted));
             });
         });
     }
