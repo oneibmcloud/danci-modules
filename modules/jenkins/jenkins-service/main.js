@@ -26,14 +26,14 @@ amqp.connect(process.env.RABBITMQ_URL, {
             ch.consume(q.queue, function(jenkins_info_encrypted) {
 
                 var key = new NodeRSA(process.env.JENKINS_PRIVATE_KEY);
-                var jenkins_info = key.decrypt(jenkins_info_encrypted.content.toString(), 'utf8');
 
-                //Check if valid JSON
                 try {
-                    JSON.parse(jenkins_info);
+                    key.decrypt(jenkins_info_encrypted.content.toString(), 'utf8');
                 } catch (e) {
-                    return;
+                    return console.log('Could not decrypt incoming message');
                 }
+
+                var jenkins_info = key.decrypt(jenkins_info_encrypted.content.toString(), 'utf8');
 
                 jenkins_service(JSON.parse(jenkins_info), conn);
                 ch.ack(jenkins_info_encrypted);
