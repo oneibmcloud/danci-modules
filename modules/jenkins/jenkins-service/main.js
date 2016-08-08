@@ -25,10 +25,8 @@ amqp.connect(process.env.RABBITMQ_URL, {
     });
 });
 
-//IMPORTANT: DOES NOT SUPPORT CRUMBS YET..., SEE NODE API OPEN ISSUES
-
 function jenkins_service(jenkins_info, conn) {
-    var jenkins = require('jenkins')(jenkins_info.url);
+    var jenkins = require('jenkins')({baseUrl: jenkins_info.url, crumbIssuer: true});
 
     //Trigger new build
     jenkins.job.build({
@@ -52,22 +50,34 @@ function jenkins_service(jenkins_info, conn) {
                     return console.log(err);
                 }
             }
+            if (data.building === true)
+                return buildStatus(jobName, buildNumber, conn);
 
-            if (data.building === true) {
-                buildStatus(jobName, buildNumber, conn);
-            } else {
-                conn.createChannel(function(err, ch) {
-                    if (err)
-                        return console.log(err);
+            returnBuildInfo(jobName, buildNumber, conn, data);
+        });
+    }
 
-                    console.log('Created RabbitMQ Channel 2');
+    function returnBuildInfo(jobName, buildNumber, conn, build_data) {
+        jenkins.build.log(jobName, buildNumber, function(err, data) {
+            if (err)
+                return console.log(err);
 
-                    var q = 'jenkins_info';
+            var build_report = {
+              build_data: build_data,
+              console_output: data
+            };
 
-                    ch.assertQueue(q, {durable: true});
-                    ch.sendToQueue(q, new Buffer(JSON.stringify(data)));
-                });
-            }
+            conn.createChannel(function(err, ch) {
+                if (err)
+                    return console.log(err);
+
+                console.log('Created RabbitMQ Channel 2');
+
+                var q = 'jenkins_info';
+
+                ch.assertQueue(q, {durable: true});
+                ch.sendToQueue(q, new Buffer(JSON.stringify(build_report)));
+            });
         });
     }
 }

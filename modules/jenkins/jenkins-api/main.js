@@ -50,11 +50,17 @@ amqp.connect(process.env.RABBITMQ_URL, {
         ch.assertQueue(q, {durable: true});
         ch.consume(q, function(jenkins_info) {
             var build_info = JSON.parse(jenkins_info.content.toString());
-            console.log(build_info);
 
-            if (build_info.result == 'SUCCESS') {
-                console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.fullDisplayName + ' was successful');
+            console.log(build_info.build_data);
+            console.log('Jenkins Console Output:');
+            console.log(build_info.console_output);
+
+            if (build_info.build_data.result == 'SUCCESS') {
+                console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.build_data.fullDisplayName + ' succeeded');
                 console.log('DANCI_STEP_STATUS_SUCCESS');
+            } else {
+                console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.build_data.fullDisplayName + ' failed');
+                console.log('DANCI_STEP_STATUS_FAILURE');
             }
 
             process.exit(0);
