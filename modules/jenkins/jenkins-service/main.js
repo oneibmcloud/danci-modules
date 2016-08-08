@@ -1,5 +1,6 @@
 //Required dependencies
 var amqp = require('amqplib/callback_api');
+var NodeRSA = require('node-rsa');
 
 amqp.connect(process.env.RABBITMQ_URL, {
     ca: [process.env.RABBITMQ_CERT]
@@ -15,13 +16,30 @@ amqp.connect(process.env.RABBITMQ_URL, {
 
         console.log('Created RabbitMQ Channel');
 
-        var q = 'jenkins_queue';
+        var ex = 'jenkins_queue';
 
-        ch.assertQueue(q, {durable: true});
-        ch.consume(q, function(jenkins_info) {
-            jenkins_service(JSON.parse(jenkins_info.content.toString()), conn);
-            ch.ack(jenkins_info);
-        }, {noAck: false});
+        ch.assertExchange(ex, 'fanout', {durable: true});
+        ch.assertQueue('', {
+            exclusive: true
+        }, function(err, q) {
+            ch.bindQueue(q.queue, ex, '');
+            ch.consume(q.queue, function(jenkins_info_encrypted) {
+
+                var key = new NodeRSA(process.env.JENKINS_PRIVATE_KEY);
+                var jenkins_info = key.decrypt(jenkins_info_encrypted.content.toString(), 'utf8');
+
+                //Check if valid JSON
+                try {
+                    JSON.parse(jenkins_info);
+                } catch (e) {
+                    return;
+                }
+
+                jenkins_service(JSON.parse(jenkins_info), conn);
+                ch.ack(jenkins_info_encrypted);
+
+            }, {noAck: false});
+        });
     });
 });
 
@@ -63,8 +81,8 @@ function jenkins_service(jenkins_info, conn) {
                 return console.log(err);
 
             var build_report = {
-              build_data: build_data,
-              console_output: data
+                build_data: build_data,
+                console_output: data
             };
 
             conn.createChannel(function(err, ch) {

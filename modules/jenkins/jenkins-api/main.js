@@ -1,5 +1,6 @@
 //Required dependencies
 var amqp = require('amqplib/callback_api');
+var NodeRSA = require('node-rsa');
 
 amqp.connect(process.env.RABBITMQ_URL, {
     ca: [process.env.RABBITMQ_CERT]
@@ -18,6 +19,9 @@ amqp.connect(process.env.RABBITMQ_URL, {
         'job_token': process.env.JENKINS_JOB_TOKEN
     };
 
+    var pubKey = new NodeRSA(process.env.JENKINS_PUB_KEY);
+    var jenkins_info_encrypted = pubKey.encrypt(JSON.stringify(jenkins_info), 'base64');
+
     conn.createChannel(function(err, ch) {
         if (err) {
             console.log(err);
@@ -28,10 +32,11 @@ amqp.connect(process.env.RABBITMQ_URL, {
 
         console.log('Created RabbitMQ Channel');
 
-        var q = 'jenkins_queue';
+        var ex = 'jenkins_queue';
 
-        ch.assertQueue(q, {durable: true});
-        ch.sendToQueue(q, new Buffer(JSON.stringify(jenkins_info)));
+        ch.assertExchange(ex, 'fanout', {durable: true});
+        ch.publish(ex, '', new Buffer(jenkins_info_encrypted));
+
         console.log('Sent build trigger to jenkins-service');
     });
 
