@@ -9,8 +9,8 @@
 - [ ] Ruby
 
 #### Modules
-- [x] Git Clone (For Internal Use)
-- [ ] Git Revert (For Internal Use)
+- [x] [Git Clone](modules/git-clone) (For Internal Use)
+- [ ] [Git Revert](modules/git-revert)  (For Internal Use)
 - [x] [Deploy: Cloud Foundry](modules/deploy-cf)
 - [x] [Node License Scanner](modules/node-licenses)
 - [x] [Jenkins Integration](modules/jenkins)
