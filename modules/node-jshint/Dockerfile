@@ -1,5 +1,5 @@
 FROM node:latest
-COPY ./lint.sh /script/
-RUN chmod -R 755 /script/
-RUN npm install -g jshint
+RUN mkdir -p /script
+RUN cd /script && npm install node-jshint
+COPY main.sh /script
 CMD ["/script/lint.sh"]
