@@ -3,7 +3,6 @@
 echo "$ nvm -v"
 . /script/nvm/nvm.sh && nvm --version
 
-# add if statement to use common languages
 #if [ $LANGUAGE_VERSION -eq 4 ] || [ $LANGUAGE_VERSION -eq 5 ] || [ $LANGUAGE_VERSION -eq 6 ];
 #then
 #    echo "$ nvm use $LANGUAGE_VERSION"
