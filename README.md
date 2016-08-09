@@ -12,7 +12,11 @@
 - [x] Git Clone (For Internal Use)
 - [ ] Git Revert (For Internal Use)
 - [x] [Deploy: Cloud Foundry](modules/deploy-cf)
-- [x] [Node Licenses](modules/node-licenses)
+- [x] [Node License Scanner](modules/node-licenses)
+- [x] [Jenkins Integration](modules/jenkins)
+- [ ] [JSHint](modules/node-jshint)
+- [ ] [Notify: Slack](modules/slack-bot)
+- [ ] [Notify: Email](modules/sendgrid)
 
 Docker modules communicate with through certain keywords and environment variables. The following environment variables are passed from DanCI to modules:
 
