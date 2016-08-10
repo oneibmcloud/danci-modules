@@ -23,7 +23,7 @@ then
     echo "DANCI_STEP_SUMMARY_Installed Node $node_version, NPM v$npm_version"
     echo "DANCI_STEP_STATUS_SUCCESS"
 else
-    echo "DANCI_ERROR: running nvm install $LANGUAGE_VERSION" >&2
+    echo "DANCI_ERROR_Error running nvm install $LANGUAGE_VERSION" >&2
     echo "DANCI_STEP_SUMMARY_Error running nvm install $LANGUAGE_VERSION"
     echo "DANCI_STEP_STATUS_FAILURE"
     exit
@@ -44,10 +44,10 @@ then
     if [ $? -eq 0 ]
     then
         echo "npm install exited with 0"
-        echo "DANCI_STEP_SUMMARY_npm install exited with 0"
+        echo "DANCI_STEP_SUMMARY_The command \"npm install\" exited with 0"
         echo "DANCI_STEP_STATUS_SUCCESS"
     else
-        echo "DANCI_ERROR: running npm install" >&2
+        echo "DANCI_ERROR_Error running npm install" >&2
         echo "DANCI_STEP_SUMMARY_Error running npm install"
         echo "DANCI_STEP_STATUS_FAILURE"
         exit
@@ -62,10 +62,10 @@ else
         if [ $? -eq 0 ]
         then
             echo "$cmd exited with 0"
-            echo "DANCI_STEP_SUMMARY_$cmd exited with 0"
+            echo "DANCI_STEP_SUMMARY_The command \"$cmd\" exited with 0"
             echo "DANCI_STEP_STATUS_SUCCESS"
         else
-            echo "DANCI_ERROR: running $cmd" >&2
+            echo "DANCI_ERROR_Error running $cmd" >&2
             echo "DANCI_STEP_SUMMARY_Error running $cmd"
             echo "DANCI_STEP_STATUS_FAILURE"
             exit
@@ -82,10 +82,10 @@ then
     if [ $? -eq 0 ]
     then
         echo "npm test exited with 0"
-        echo "DANCI_STEP_SUMMARY_npm test exited with 0"
+        echo "DANCI_STEP_SUMMARY_The command \"npm test\" exited with 0"
         echo "DANCI_STEP_STATUS_SUCCESS"
     else
-        echo "DANCI_ERROR: running npm test" >&2
+        echo "DANCI_ERROR_Error running npm test" >&2
         echo "DANCI_STEP_SUMMARY_Error running npm test"
         echo "DANCI_STEP_STATUS_FAILURE"
         exit
@@ -100,10 +100,10 @@ else
         if [ $? -eq 0 ]
         then
             echo "$cmd exited with 0"
-            echo "DANCI_STEP_SUMMARY_$cmd exited with 0"
+            echo "DANCI_STEP_SUMMARY_The command \"$cmd\" exited with 0"
             echo "DANCI_STEP_STATUS_SUCCESS"
         else
-            echo "DANCI_ERROR: running $cmd" >&2
+            echo "DANCI_ERROR_Error running $cmd" >&2
             echo "DANCI_STEP_SUMMARY_Error running $cmd"
             echo "DANCI_STEP_STATUS_FAILURE"
             exit
