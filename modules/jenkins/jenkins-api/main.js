@@ -61,22 +61,27 @@ amqp.connect(process.env.RABBITMQ_URL, {
                 try {
                     pubKey.decryptPublic(build_report_encrypted.content.toString(), 'utf8');
                     decryptMessage();
-                } catch (e) {}
+                }
 
                 function decryptMessage() {
                     var build_report = pubKey.decryptPublic(build_report_encrypted.content.toString(), 'utf8');
                     var build_info = JSON.parse(build_report);
 
-                    console.log(build_info.build_data);
-                    console.log('Jenkins Console Output:');
-                    console.log(build_info.console_output);
+                    try {
+                        console.log(build_info.build_data);
+                        console.log('Jenkins Console Output:');
+                        console.log(build_info.console_output);
 
-                    if (build_info.build_data.result == 'SUCCESS') {
-                        console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.build_data.fullDisplayName + ' succeeded');
-                        console.log('DANCI_STEP_STATUS_SUCCESS');
-                    } else {
-                        console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.build_data.fullDisplayName + ' failed');
-                        console.log('DANCI_STEP_STATUS_FAILURE');
+                        if (build_info.build_data.result == 'SUCCESS') {
+                            console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.build_data.fullDisplayName + ' succeeded');
+                            console.log('DANCI_STEP_STATUS_SUCCESS');
+                        } else {
+                            console.log('DANCI_STEP_SUMMARY_Jenkins ' + build_info.build_data.fullDisplayName + ' failed');
+                            console.log('DANCI_STEP_STATUS_FAILURE');
+                        }
+                    } catch (e) {
+                        console.log(build_info);
+                        process.exit(0);
                     }
 
                     process.exit(0);

@@ -51,11 +51,26 @@ function jenkins_service(jenkins_info, conn) {
         'name': jenkins_info.job_name,
         'token': jenkins_info.job_token
     }, function(err, buildNumber) {
-        if (err)
-            return console.log(err);
+        if (err) {
+            var key = new NodeRSA(process.env.JENKINS_PRIVATE_KEY);
+            var error_encrypted = key.encryptPrivate(err, 'base64');
 
-        console.log('Jenkins build started, job name: ' + jenkins_info.job_name + ', build number: ' + (buildNumber + 1));
-        buildStatus(jenkins_info.job_name, buildNumber + 1, conn);
+            conn.createChannel(function(err, ch) {
+                if (err)
+                    return console.log(err);
+
+                console.log('Created RabbitMQ Channel 2');
+
+                var ex = 'jenkins_info';
+
+                ch.assertExchange(ex, 'fanout', {durable: true});
+                ch.publish(ex, '', new Buffer(error_encrypted));
+            });
+            console.log(err);
+        } else {
+            console.log('Jenkins build started, job name: ' + jenkins_info.job_name + ', build number: ' + buildNumber);
+            buildStatus(jenkins_info.job_name, buildNumber, conn);
+        }
     });
 
     //Get build status
