@@ -61,7 +61,7 @@ amqp.connect(process.env.RABBITMQ_URL, {
                 try {
                     pubKey.decryptPublic(build_report_encrypted.content.toString(), 'utf8');
                     decryptMessage();
-                }
+                } catch (e) {}
 
                 function decryptMessage() {
                     var build_report = pubKey.decryptPublic(build_report_encrypted.content.toString(), 'utf8');
