@@ -14,6 +14,7 @@
 - [x] [Deploy: Cloud Foundry](modules/deploy-cf)
 - [x] [Node License Scanner](modules/node-licenses)
 - [x] [Jenkins Integration](modules/jenkins)
+- [ ] [Meteor build](modules/meteor-build)
 - [ ] [JSHint](modules/node-jshint)
 - [ ] [Notify: Slack](modules/slack-bot)
 - [ ] [Notify: Email](modules/sendgrid)
