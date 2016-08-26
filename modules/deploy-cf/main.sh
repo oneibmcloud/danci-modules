@@ -42,8 +42,11 @@ then
         exit
     fi
 else
-    echo "cf push $APP_NAME -p $DEPLOY_PATH"
-    /script/cf push $APP_NAME -p $DEPLOY_PATH
+    echo "cd $DEPLOY_PATH"
+    cd $DEPLOY_PATH
+
+    echo "cf push $APP_NAME"
+    /script/cf push $APP_NAME
 
     if [ $? -eq 0 ]
     then
