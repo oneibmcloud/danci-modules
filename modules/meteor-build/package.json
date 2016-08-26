@@ -5,7 +5,8 @@
   "main": "bundle/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preinstall": "(cd bundle/programs/server && npm install)"
+    "preinstall": "(cd bundle/programs/server && npm install)",
+    "start": "node bundle/main.js"
   },
   "author": "",
   "license": "MIT"
