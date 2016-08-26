@@ -2,11 +2,6 @@
 echo "cf api $DEPLOY_API"
 /script/cf api $DEPLOY_API
 
-if [ $DEPLOY_PATH ]
-then
-    cd $DEPLOY_PATH
-fi
-
 if [ $? -eq 0 ]
 then
     echo "cf api $DEPLOY_API exited with 0"
