@@ -25,17 +25,38 @@ else
     exit
 fi
 
-echo "cf push $APP_NAME -p $FILE_PATH"
-/script/cf push $APP_NAME -p $FILE_PATH
-
-if [ $? -eq 0 ]
+if [ -z ${DEPLOY_PATH+x} ];
 then
-    echo "cf push $APP_NAME -p $FILE_PATH exited with 0"
-    echo "DANCI_STEP_SUMMARY_Deployed $APP_NAME in org $DEPLOY_ORGANIZATION, space $DEPLOY_SPACE"
-    echo "DANCI_STEP_STATUS_SUCCESS"
+    echo "cf push $APP_NAME -p $FILE_PATH"
+    /script/cf push $APP_NAME -p $FILE_PATH
+
+    if [ $? -eq 0 ]
+    then
+        echo "cf push $APP_NAME -p $FILE_PATH exited with 0"
+        echo "DANCI_STEP_SUMMARY_Deployed $APP_NAME in org $DEPLOY_ORGANIZATION, space $DEPLOY_SPACE"
+        echo "DANCI_STEP_STATUS_SUCCESS"
+    else
+        echo "DANCI_ERROR_Error running cf push $APP_NAME -p $FILE_PATH" >&2
+        echo "DANCI_STEP_SUMMARY_Error running cf push $APP_NAME -p $FILE_PATH"
+        echo "DANCI_STEP_STATUS_FAILURE"
+        exit
+    fi
 else
-    echo "DANCI_ERROR_Error running cf push $APP_NAME -p $FILE_PATH" >&2
-    echo "DANCI_STEP_SUMMARY_Error running cf push $APP_NAME -p $FILE_PATH"
-    echo "DANCI_STEP_STATUS_FAILURE"
-    exit
+    echo "cd $DEPLOY_PATH"
+    cd $DEPLOY_PATH
+
+    echo "cf push $APP_NAME"
+    /script/cf push $APP_NAME
+
+    if [ $? -eq 0 ]
+    then
+        echo "cf push $APP_NAME exited with 0"
+        echo "DANCI_STEP_SUMMARY_Deployed $APP_NAME in org $DEPLOY_ORGANIZATION, space $DEPLOY_SPACE"
+        echo "DANCI_STEP_STATUS_SUCCESS"
+    else
+        echo "DANCI_ERROR_Error running cf push $APP_NAME" >&2
+        echo "DANCI_STEP_SUMMARY_Error running cf push $APP_NAME"
+        echo "DANCI_STEP_STATUS_FAILURE"
+        exit
+    fi
 fi
