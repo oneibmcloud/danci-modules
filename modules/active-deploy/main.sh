@@ -81,15 +81,15 @@ else
     exit
 fi
 
-echo "cf active-deploy-advance NEW_$APP_NAME"
-/script/cf active-deploy-advance NEW_$APP_NAME
+echo "cf active-deploy-advance NEW_$APP_NAME --force"
+/script/cf active-deploy-advance NEW_$APP_NAME --force
 
 if [ $? -eq 0 ]
 then
-    echo "cf active-deploy advance NEW_$APP_NAME exited with 0"
+    echo "cf active-deploy-advance NEW_$APP_NAME --force exited with 0"
 else
-    echo "DANCI_ERROR_Error running cf active-deploy advance NEW_$APP_NAME" >&2
-    echo "DANCI_STEP_SUMMARY_Error running cf active-deploy advance NEW_$APP_NAME"
+    echo "DANCI_ERROR_Error running cf active-deploy-advance NEW_$APP_NAME --force" >&2
+    echo "DANCI_STEP_SUMMARY_Error running cf active-deploy advance NEW_$APP_NAME --force"
     echo "DANCI_STEP_STATUS_FAILURE"
     exit
 fi
