@@ -94,15 +94,15 @@ else
     exit
 fi
 
-echo "cf delete $APP_NAME"
-/script/cf delete $APP_NAME
+echo "cf delete $APP_NAME -f"
+/script/cf delete $APP_NAME -f
 
 if [ $? -eq 0 ]
 then
-    echo "cf delete $APP_NAME exited with 0"
+    echo "cf delete $APP_NAME -f exited with 0"
 else
-    echo "DANCI_ERROR_Error running cf delete $APP_NAME" >&2
-    echo "DANCI_STEP_SUMMARY_Error running cf delete $APP_NAME"
+    echo "DANCI_ERROR_Error running cf delete $APP_NAME -f" >&2
+    echo "DANCI_STEP_SUMMARY_Error running cf delete $APP_NAME -f"
     echo "DANCI_STEP_STATUS_FAILURE"
     exit
 fi
