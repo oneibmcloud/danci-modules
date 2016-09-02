@@ -81,8 +81,8 @@ else
     exit
 fi
 
-echo "cf active-deploy advance NEW_$APP_NAME"
-/script/cf active-deploy advance NEW_$APP_NAME
+echo "cf active-deploy-advance NEW_$APP_NAME"
+/script/cf active-deploy-advance NEW_$APP_NAME
 
 if [ $? -eq 0 ]
 then
