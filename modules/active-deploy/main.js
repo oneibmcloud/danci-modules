@@ -12,28 +12,16 @@ if (process.env.MANIFEST_PATH) {
 
 deploy_config = YAML.load(manifest);
 
-for (var i = 0; i < deploy_config.applications.length; i++) {
-    var name = deploy_config.applications[i].name;
-
-    if (deploy_config.applications[i].env) {
-        var env_variables = deploy_config.applications[i].env;
-        //Replace place-holder values with decrypted values
+console.log('cf api ' + process.env.DEPLOY_API);
+exec('/script/cf api ' + process.env.DEPLOY_API, function(err, stdout, stderr) {
+    if (err) {
+        console.log('DANCI_ERROR_Error running cf api ' + process.env.DEPLOY_API + ': ' + err);
+        console.log('DANCI_STEP_SUMMARY_Error running cf api ' + process.env.DEPLOY_API + ': ' + err);
+        return console.log('DANCI_STEP_STATUS_FAILURE');
     }
-}
-
-cf_api();
-
-function cf_api() {
-    console.log('cf api ' + process.env.DEPLOY_API);
-    exec('/script/cf api ' + process.env.DEPLOY_API, function(err, stdout, stderr) {
-        if (err) {
-            console.log('DANCI_ERROR_Error running cf api ' + process.env.DEPLOY_API + ': ' + err);
-            console.log('DANCI_STEP_SUMMARY_Error running cf api ' + process.env.DEPLOY_API + ': ' + err);
-            return console.log('DANCI_STEP_STATUS_FAILURE');
-        }
-        console.log(stdout);
-    });
-}
+    console.log(stdout);
+    cf_login();
+});
 
 function cf_login() {
     console.log('cf login -u ' + process.env.DEPLOY_USERNAME + ' -p [PRIVATE] -o ' + process.env.DEPLOY_ORGANIZATION + ' -s ' + process.env.DEPLOY_SPACE);
@@ -44,9 +32,19 @@ function cf_login() {
             return console.log('DANCI_STEP_STATUS_FAILURE');
         }
         console.log(stdout);
-        cf_push();
     });
 }
+
+for (var i = 0; i < deploy_config.applications.length; i++) {
+    var app_name = deploy_config.applications[i].name;
+
+    if (deploy_config.applications[i].env) {
+        var env_variables = deploy_config.applications[i].env;
+        //Replace place-holder values with decrypted values
+    }
+}
+
+//cf_push();
 
 function cf_push() {
     console.log('cf push ' + process.env.APP_NAME + '-new --no-route');
