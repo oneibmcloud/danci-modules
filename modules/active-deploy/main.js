@@ -9,7 +9,7 @@ var manifest,
 if (process.env.MANIFEST_PATH) {
     manifest = process.env.MANIFEST_PATH;
 } else {
-    manifest = proccess.env.FILE_PATH + '/manifest.yml';
+    manifest = process.env.FILE_PATH + '/manifest.yml';
 }
 
 deploy_config = YAML.load(manifest);
@@ -39,12 +39,13 @@ function cf_login() {
 }
 
 function parseManifest() {
-    for (var i = 0; i < deploy_config.applications.lenth; i++) {
-        var app_name = deploy_config.applications[i].name;
+    for (var i = 0; i < deploy_config.applications.length; i++) {
         if (deploy_config.applications[i].env) {
             var env_variables = deploy_config.applications[i].env;
             for (var key in env_variables) {
+                console.log(key + '=' + env_variables[key]);
                 if (env_variables[key].substring(0, 1) == '{' && env_variables[key].substring(env_variables[key].length - 1, env_variables[key].length) == '}') {
+                    console.log(process.env[key]);
                     env_variables[key] = process.env[key];
                 }
             }
@@ -78,12 +79,14 @@ function parseManifest() {
 }
 
 function writeManifet() {
-    fs.writeFile(maifest, deploy_config, function(err) {
+    var new_config = YAML.stringify(deploy_config);
+    console.log(deploy_config);
+    fs.writeFile(manifest, new_config, function(err) {
         if (err) {
             return console.log(err);
         }
         console.log('Wrote new manifest.yml file');
-        cf_push();
+        //cf_push();
     });
 }
 
@@ -125,6 +128,21 @@ function cf_active_deploy_advance() {
         cf_delete();
     });
 }
+
+/*
+function cf_active_deploy_delete() {
+    console.log('cf active-deploy-delete new_' + process.env.APP_NAME);
+    exec('/script/cf active-deploy-delete new_' + process.env.APP_NAME, function(err, stdout, stderr) {
+        if (err) {
+            console.log('DANCI_ERROR_Error running cf active-deploy-delete new_' + process.env.APP_NAME + ' --force: ' + err);
+            console.log('DANCI_STEP_SUMMARY_Error running cf active-deploy-delete new_' + process.env.APP_NAME + ' --force: ' + err);
+            return console.log('DANCI_STEP_STATUS_FAILURE');
+        }
+        console.log(stdout);
+        cf_delete();
+    });
+}
+*/
 
 function cf_delete() {
     console.log('cf delete ' + process.env.APP_NAME + ' -f');
