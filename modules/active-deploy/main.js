@@ -1,4 +1,6 @@
+//var async = require('async');
 var exec = require('child_process').exec;
+var fs = require('fs');
 var YAML = require('yamljs');
 
 var manifest,
@@ -32,19 +34,58 @@ function cf_login() {
             return console.log('DANCI_STEP_STATUS_FAILURE');
         }
         console.log(stdout);
+        parseManifest();
     });
 }
 
-for (var i = 0; i < deploy_config.applications.length; i++) {
-    var app_name = deploy_config.applications[i].name;
-
-    if (deploy_config.applications[i].env) {
-        var env_variables = deploy_config.applications[i].env;
-        //Replace place-holder values with decrypted values
+function parseManifest() {
+    for (var i = 0; i < deploy_config.applications.lenth; i++) {
+        var app_name = deploy_config.applications[i].name;
+        if (deploy_config.applications[i].env) {
+            var env_variables = deploy_config.applications[i].env;
+            for (var key in env_variables) {
+                if (env_variables[key].substring(0, 1) == '{' && env_variables[key].substring(env_variables[key].length - 1, env_variables[key].length) == '}') {
+                    env_variables[key] = process.env[key];
+                }
+            }
+        }
     }
+    writeManifet();
+
+    /*
+    //Async Version (un-comment top line too)
+    async.eachSeries(deploy_config.applications, function(application, next) {
+        var app_name = application.name;
+
+        if (application.env) {
+            async.forEachOf(application.env, function(value, key, next) {
+                if (value.substring(0, 1) == '{' && value.substring(value.length - 1, value.length) == '}') {
+                    value = process.env[key];
+                    next();
+                } else {
+                    next();
+                }
+            }, function(err) {
+                writeManifet();
+                next();
+            });
+        } else {
+            writeManifet();
+            next();
+        }
+    });
+    */
 }
 
-//cf_push();
+function writeManifet() {
+    fs.writeFile(maifest, deploy_config, function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log('Wrote new manifest.yml file');
+        cf_push();
+    });
+}
 
 function cf_push() {
     console.log('cf push ' + process.env.APP_NAME + '-new --no-route');
