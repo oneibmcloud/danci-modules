@@ -80,13 +80,12 @@ function parseManifest() {
 
 function writeManifet() {
     var new_config = YAML.stringify(deploy_config);
-    console.log(deploy_config);
     fs.writeFile(manifest, new_config, function(err) {
         if (err) {
             return console.log(err);
         }
         console.log('Wrote new manifest.yml file');
-        //cf_push();
+        cf_push();
     });
 }
 
