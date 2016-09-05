@@ -1,4 +1,5 @@
 FROM node:latest
+RUN mkdir /script/
 RUN curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
 RUN mv cf /script/
 RUN /script/cf add-plugin-repo bluemix http://plugins.ng.bluemix.net
