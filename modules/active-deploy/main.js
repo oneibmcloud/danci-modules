@@ -102,11 +102,11 @@ function cf_push() {
 }
 
 function cf_active_deploy_create() {
-    console.log('cf active-deploy-create ' + process.env.APP_NAME + ' ' + process.env.APP_NAME + '-new --label new_' + process.env.APP_NAME);
-    exec('/script/cf active-deploy-create ' + process.env.APP_NAME + ' ' + process.env.APP_NAME + '-new --label new_' + process.env.APP_NAME, function(err, stdout, stderr) {
+    console.log('cf active-deploy-create ' + process.env.APP_NAME + ' ' + process.env.APP_NAME + '-new --label ' + process.env.DANCI_BUILD_ID);
+    exec('/script/cf active-deploy-create ' + process.env.APP_NAME + ' ' + process.env.APP_NAME + '-new --label ' + process.env.DANCI_BUILD_ID, function(err, stdout, stderr) {
         if (err) {
-            console.log('DANCI_ERROR_Error running cf active-deploy-create ' + process.env.APP_NAME + ' ' + process.env.APP_NAME + '-new --label new_' + process.env.APP_NAME + ': ' + err);
-            console.log('DANCI_STEP_SUMMARY_Error running cf active-deploy-create ' + process.env.APP_NAME + ' ' + process.env.APP_NAME + '-new --label new_' + process.env.APP_NAME + ': ' + err);
+            console.log('DANCI_ERROR_Error running cf active-deploy-create ' + process.env.APP_NAME + ' ' + process.env.APP_NAME + '-new --label ' + process.env.DANCI_BUILD_ID + ': ' + err);
+            console.log('DANCI_STEP_SUMMARY_Error running cf active-deploy-create ' + process.env.APP_NAME + ' ' + process.env.APP_NAME + '-new --label ' + process.env.DANCI_BUILD_ID + ': ' + err);
             return console.log('DANCI_STEP_STATUS_FAILURE');
         }
         console.log(stdout);
@@ -115,11 +115,11 @@ function cf_active_deploy_create() {
 }
 
 function cf_active_deploy_advance() {
-    console.log('cf active-deploy-advance new_' + process.env.APP_NAME + ' --force');
-    exec('/script/cf active-deploy-advance new_' + process.env.APP_NAME + ' --force', function(err, stdout, stderr) {
+    console.log('cf active-deploy-advance ' + process.env.DANCI_BUILD_ID + ' --force');
+    exec('/script/cf active-deploy-advance ' + process.env.DANCI_BUILD_ID + ' --force', function(err, stdout, stderr) {
         if (err) {
-            console.log('DANCI_ERROR_Error running cf active-deploy-advance new_' + process.env.APP_NAME + ' --force: ' + err);
-            console.log('DANCI_STEP_SUMMARY_Error running cf active-deploy-advance new_' + process.env.APP_NAME + ' --force: ' + err);
+            console.log('DANCI_ERROR_Error running cf active-deploy-advance new_' + process.env.DANCI_BUILD_ID + ' --force: ' + err);
+            console.log('DANCI_STEP_SUMMARY_Error running cf active-deploy-advance new_' + process.env.DANCI_BUILD_ID + ' --force: ' + err);
             return console.log('DANCI_STEP_STATUS_FAILURE');
         }
         console.log(stdout);
