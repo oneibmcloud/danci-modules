@@ -43,7 +43,6 @@ function parseManifest() {
         if (deploy_config.applications[i].env) {
             var env_variables = deploy_config.applications[i].env;
             for (var key in env_variables) {
-                console.log(key + '=' + env_variables[key]);
                 if (env_variables[key].substring(0, 1) == '{' && env_variables[key].substring(env_variables[key].length - 1, env_variables[key].length) == '}') {
                     console.log(process.env[key]);
                     env_variables[key] = process.env[key];
