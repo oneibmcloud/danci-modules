@@ -1,4 +1,3 @@
-//var async = require('async');
 var exec = require('child_process').exec;
 var fs = require('fs');
 var YAML = require('yamljs');
@@ -51,30 +50,6 @@ function parseManifest() {
         }
     }
     writeManifet();
-
-    /*
-    //Async Version (un-comment top line too)
-    async.eachSeries(deploy_config.applications, function(application, next) {
-        var app_name = application.name;
-
-        if (application.env) {
-            async.forEachOf(application.env, function(value, key, next) {
-                if (value.substring(0, 1) == '{' && value.substring(value.length - 1, value.length) == '}') {
-                    value = process.env[key];
-                    next();
-                } else {
-                    next();
-                }
-            }, function(err) {
-                writeManifet();
-                next();
-            });
-        } else {
-            writeManifet();
-            next();
-        }
-    });
-    */
 }
 
 function writeManifet() {
@@ -126,21 +101,6 @@ function cf_active_deploy_advance() {
         cf_delete();
     });
 }
-
-/*
-function cf_active_deploy_delete() {
-    console.log('cf active-deploy-delete new_' + process.env.APP_NAME);
-    exec('/script/cf active-deploy-delete new_' + process.env.APP_NAME, function(err, stdout, stderr) {
-        if (err) {
-            console.log('DANCI_ERROR_Error running cf active-deploy-delete new_' + process.env.APP_NAME + ' --force: ' + err);
-            console.log('DANCI_STEP_SUMMARY_Error running cf active-deploy-delete new_' + process.env.APP_NAME + ' --force: ' + err);
-            return console.log('DANCI_STEP_STATUS_FAILURE');
-        }
-        console.log(stdout);
-        cf_delete();
-    });
-}
-*/
 
 function cf_delete() {
     console.log('cf delete ' + process.env.APP_NAME + ' -f');
