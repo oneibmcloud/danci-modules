@@ -42,8 +42,8 @@ function parseManifest() {
         if (deploy_config.applications[i].env) {
             var env_variables = deploy_config.applications[i].env;
             for (var key in env_variables) {
-                if (env_variables[key].substring(0, 1) == '{' && env_variables[key].substring(env_variables[key].length - 1, env_variables[key].length) == '}') {
-                    console.log(process.env[key]);
+                var env_var = String(env_variables[key]);
+                if (env_var.substring(0, 1) == '{' && env_var.substring(env_var.length - 1, env_var.length) == '}') {
                     env_variables[key] = process.env[key];
                 }
             }
