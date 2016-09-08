@@ -129,11 +129,17 @@ function cf_rename() {
 }
 
 function cf_scale() {
-  console.log('cf scale ' + process.env.APP_NAME + ' -i 4');
-  exec('/script/cf scale ' + process.env.APP_NAME + ' -i 4', function(err, stdout, stderr) {
+  var count;
+  if (process.env.INSTANCE_COUNT) {
+    count = process.env.INSTANCE_COUNT;
+  } else {
+    count = 2;
+  }
+  console.log('cf scale ' + process.env.APP_NAME + ' -i ' + count);
+  exec('/script/cf scale ' + process.env.APP_NAME + ' -i ' + count, function(err, stdout, stderr) {
     if (err) {
-      console.log('DANCI_ERROR_Error running cf scale ' + process.env.APP_NAME + ' -i 4: ' + err);
-      console.log('DANCI_STEP_SUMMARY_Error running cf scale ' + process.env.APP_NAME + ' -i 4: ' + err);
+      console.log('DANCI_ERROR_Error running cf scale ' + process.env.APP_NAME + ' -i ' + count + ': ' + err);
+      console.log('DANCI_STEP_SUMMARY_Error running cf scale ' + process.env.APP_NAME + ' -i ' + count + ': ' + err);
       return console.log('DANCI_STEP_STATUS_FAILURE');
     }
     console.log(stdout);
