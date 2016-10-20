@@ -1,8 +1,7 @@
 FROM alpine:latest
 COPY ./main.sh /script/
-COPY ./certs.tar.gz.enc /certs/
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash curl docker openssl
+    apk add --no-cache bash curl docker python python-dev
 RUN curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
 RUN mv cf /script
 ENV CF_PLUGIN_HOME=/script

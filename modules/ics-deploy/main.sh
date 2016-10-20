@@ -1,10 +1,5 @@
 #!/bin/bash
 set -x
-echo ${CERT_PASSWORD} > /certs/password.file
-openssl aes-256-cbc -d -in /certs/certs.tar.gz.enc < /certs/password.file | tar xz -C /
-export DOCKER_CERT_PATH=/certs
-export DOCKER_TLS_VERIFY=true
-cat /certs/ca.pem
 
 echo "cf api $DEPLOY_API"
 /script/cf api $DEPLOY_API
@@ -42,5 +37,10 @@ else
     exit
 fi
 
-cd examples/apps/bookinfo
-./build-services.sh todkap
+mkdir run
+cd run
+PAUSE_AT=change-2 ../scripts/create_and_start.sh
+../scripts/ad-utils/ad_wait.sh
+sleep 60
+../scripts/ad-utils/ad_resume.sh
+../scripts/complete.sh
